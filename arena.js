@@ -37,17 +37,19 @@ class Arena {
 
     sweep() {
         let rowCount = 1;
-        outer: for (let y = this.length - 1; 0 < y; y--) {
-            for (let x = 0; x < this[y].length; x++) {
-                if (this[y][x] === 0) {
+        let totalScore = 0;
+        outer: for (let y = this.matrix.length - 1; 0 < y; y--) {
+            for (let x = 0; x < this.matrix[y].length; x++) {
+                if (this.matrix[y][x] === 0) {
                     continue outer;
                 }
             }
-            const row = this.splice(y, 1)[0].fill(0);
-            this.unshift(row);
+            const row = this.matrix.splice(y, 1)[0].fill(0);
+            this.matrix.unshift(row);
             ++y;
-            player.score += rowCount * 10;
+            totalScore += rowCount * 10;
             rowCount *= 2;
         }
+        return totalScore;
     }
 }

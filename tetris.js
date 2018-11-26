@@ -1,7 +1,8 @@
 class Tetris {
-    constructor(canvas) {
-        this.canvas = canvas;
-        this.context = canvas.getContext('2d');
+    constructor(element) {
+        this.element = element;
+        this.canvas = element.querySelector('canvas');
+        this.context = this.canvas.getContext('2d');
         this.context.scale(20, 20);
 
         this.arena = new Arena(12, 20);
@@ -16,6 +17,7 @@ class Tetris {
             requestAnimationFrame(update);
         }
         update();
+        this.updateScore();
     }
 
     draw() {
@@ -37,5 +39,9 @@ class Tetris {
                 }
             });
         });
+    }
+
+    updateScore() {
+        this.element.querySelector('.score').innerText = this.player.score;
     }
 }

@@ -9,7 +9,6 @@ class Player {
         this.score = 0
 
         this.reset();
-        this.updateScore();
     }
 
     _createPiece(type) {
@@ -65,8 +64,8 @@ class Player {
             this.pos.y--;
             this.arena.merge(this);
             this.reset();
-            this.arena.sweep();
-            this.updateScore();
+            this.score += this.arena.sweep();
+            this.tetris.updateScore();
         }
         this.dropCounter = 0;
     }
@@ -97,7 +96,7 @@ class Player {
         if (this.arena.collide(this)) {
             this.arena.clear();
             this.score = 0;
-            this.updateScore();
+            this.tetris.updateScore();
         }
     }
 
@@ -141,9 +140,5 @@ class Player {
         if (this.dropCounter > this.dropInterval) {
             this.drop();
         }
-    }
-
-    updateScore() {
-        // document.getElementById('score').innerText = this.score;
     }
 }
