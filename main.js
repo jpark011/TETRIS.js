@@ -13,7 +13,7 @@ const tetri = [];
 
 const playerElements = document.querySelectorAll('.player');
 [...playerElements].forEach( element => {
-    const tetris = new Tetris(element.querySelector('canvas'));
+    const tetris = new Tetris(element);
     tetri.push(tetris);
 });
 
@@ -37,7 +37,6 @@ document.addEventListener('keydown', event => {
             break;
         case 32:
             tetri[0].player.instantDrop();
-            console.log("drop");
             break;
     }
 });
