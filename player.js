@@ -6,10 +6,57 @@ class Player {
         this.dropCounter = 0;
         this.dropInterval = 1000;
         this.pos ={ x: 5, y: 5 },
-        this.matrix = createPiece('T'),
         this.score = 0
 
         this.reset();
+        this.updateScore();
+    }
+
+    _createPiece(type) {
+        switch (type) {
+            case "T":
+                return [
+                    [0, 0, 0],
+                    [1, 1, 1],
+                    [0, 1, 0],
+                ];
+            case "O":
+                return [
+                    [2, 2],
+                    [2, 2],
+                ];
+            case "L":
+                return [
+                    [0, 3, 0],
+                    [0, 3, 0],
+                    [0, 3, 3],
+                ];
+            case "J":
+                return [
+                    [0, 4, 0],
+                    [0, 4, 0],
+                    [4, 4, 0],
+                ];
+            case "I":
+                return [
+                    [0, 5, 0, 0],
+                    [0, 5, 0, 0],
+                    [0, 5, 0, 0],
+                    [0, 5, 0, 0]
+                ];
+            case "S":
+                return [
+                    [0, 6, 6],
+                    [6, 6, 0],
+                    [0, 0, 0],
+                ];
+            case "Z":
+                return [
+                    [7, 7, 0],
+                    [0, 7, 7],
+                    [0, 0, 0],
+                ];
+        }
     }
 
     drop() {
@@ -19,9 +66,20 @@ class Player {
             this.arena.merge(this);
             this.reset();
             this.arena.sweep();
-            updateScore();
+            this.updateScore();
         }
         this.dropCounter = 0;
+    }
+
+    instantDrop() {
+        while (true) {
+            this.pos.y++;
+            if (this.arena.collide(this)) {
+                this.pos.y--;
+                break;
+            }
+        }
+        this.drop();
     }
 
     move(dir) {
@@ -33,13 +91,13 @@ class Player {
 
     reset() {
         const pieces = 'ILJOTSZ';
-        this.matrix = createPiece(pieces[pieces.length * Math.random() | 0]);
+        this.matrix = this._createPiece(pieces[pieces.length * Math.random() | 0]);
         this.pos.y = 0;
         this.pos.x = (this.arena.matrix[0].length / 2 | 0) - (this.matrix[0].length / 2 | 0);
         if (this.arena.collide(this)) {
             this.arena.clear();
             this.score = 0;
-            updateScore();
+            this.updateScore();
         }
     }
 
@@ -83,5 +141,9 @@ class Player {
         if (this.dropCounter > this.dropInterval) {
             this.drop();
         }
+    }
+
+    updateScore() {
+        // document.getElementById('score').innerText = this.score;
     }
 }
