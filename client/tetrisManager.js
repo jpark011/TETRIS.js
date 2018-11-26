@@ -1,24 +1,39 @@
-class TetrisManager {
-    constructor(document) {
+class TetrisManager
+{
+    constructor(document)
+    {
         this.document = document;
-        this.template = document.getElementById('player-template');
-        this.instances = new Set;
+        this.template = this.document.querySelector('#player-template');
+
+        this.instances = [];
     }
 
-    createPlayer() {
-        const element = this.document
+    createPlayer()
+    {
+        const element = document
             .importNode(this.template.content, true)
             .children[0];
+
         const tetris = new Tetris(element);
-        this.instances.add(tetris);
 
         this.document.body.appendChild(tetris.element);
+
+        this.instances.push(tetris);
 
         return tetris;
     }
 
-    removePlayer(tetris) {
-        this.instances.delete(tetris);
+    removePlayer(tetris)
+    {
         this.document.body.removeChild(tetris.element);
+
+        this.instances = this.instances.filter(instance => instance !== tetris);
+    }
+
+    sortPlayers(tetri)
+    {
+        tetri.forEach(tetris => {
+            this.document.body.appendChild(tetris.element);
+        });
     }
 }

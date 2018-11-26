@@ -1,29 +1,42 @@
 const tetrisManager = new TetrisManager(document);
-const localTetris = tetrisManager.createPlayer();
+const tetrisLocal = tetrisManager.createPlayer();
+tetrisLocal.element.classList.add('local');
+tetrisLocal.run();
 
-const connectionManager = new ConnectionManager();
+const connectionManager = new ConnectionManager(tetrisManager);
 connectionManager.connect('ws://localhost:9000');
 
-document.addEventListener('keydown', event => {
-    const player = localTetris.player;
-    switch (event.keyCode) {
-        case 37:
-            player.move(-1);
-            break;
-        case 39:
-            player.move(1);
-            break;
-        case 40:
-            player.drop();
-            break;
-        case 38:
-            player.rotate(1);
-            break;
-        case 81:
-            player.rotate(-1);
-            break;
-        case 32:
-            player.instantDrop();
-            break;
-    }
-});
+const keyListener = (event) => {
+    [
+        [65, 68, 69, 87, 83, 32],
+    ].forEach((key, index) => {
+        const player = tetrisLocal.player;
+        if (event.type === 'keydown') {
+            if (event.keyCode === key[0]) {
+                player.move(-1);
+            } else if (event.keyCode === key[1]) {
+                player.move(1);
+            } else if (event.keyCode === key[2]) {
+                player.rotate(-1);
+            } else if (event.keyCode === key[3]) {
+                player.rotate(1);
+            } else if (event.keyCode === key[5]) {
+                player.instantDrop();
+            }
+        }
+
+        if (event.keyCode === key[4]) {
+            if (event.type === 'keydown') {
+                if (player.dropInterval !== player.DROP_FAST) {
+                    player.drop();
+                    player.dropInterval = player.DROP_FAST;
+                }
+            } else {
+                player.dropInterval = player.DROP_SLOW;
+            }
+        }
+    });
+};
+
+document.addEventListener('keydown', keyListener);
+document.addEventListener('keyup', keyListener);
