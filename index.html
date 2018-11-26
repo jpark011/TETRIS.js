@@ -22,17 +22,18 @@
         </style>
     </head>
     <body>
-        <div class="player">
-            <h1 class="score"></h1>
-            <canvas class="tetris" width="240" height="400" />
-        </div>
-        <div class="player">
-            <h1 class="score"></h1>
-            <canvas class="tetris" width="240" height="400" />
-        </div>
-        <script src="arena.js"></script>
-        <script src="player.js"></script>
-        <script src="tetris.js"></script>
-        <script src="main.js"></script>
+        <template id="player-template">
+            <div class="player">
+                <h1 class="score"></h1>
+                <canvas class="tetris" width="240" height="400" />
+            </div>
+        </template>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/0.3.9/peer.min.js"></script>
+        <script src="client/tetrisManager.js"></script>
+        <script src="client/connectionManager.js"></script>
+        <script src="client/arena.js"></script>
+        <script src="client/player.js"></script>
+        <script src="client/tetris.js"></script>
+        <script src="client/main.js"></script>
     </body>
 </html>

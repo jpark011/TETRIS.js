@@ -8,6 +8,17 @@ class Tetris {
         this.arena = new Arena(12, 20);
         this.player = new Player(this);
 
+        this.colors = [
+            null,
+            'red',
+            'blue',
+            'violet',
+            'green',
+            'purple',
+            'orange',
+            'pink'
+        ];
+
         let lastTime = 0;
         const update = (time = 0) => {
             const deltaTime = time - lastTime;
@@ -32,7 +43,7 @@ class Tetris {
         matrix.forEach((row, y) => {
             row.forEach((value, x) => {
                 if (value !== 0) {
-                    this.context.fillStyle = colors[value];
+                    this.context.fillStyle = this.colors[value];
                     this.context.fillRect(x + offset.x,
                         y + offset.y,
                         1, 1);
