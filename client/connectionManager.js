@@ -7,24 +7,14 @@ class ConnectionManager
         this.tetrisManager = tetrisManager;
         this.localTetris = this.tetrisManager.instances[0];
         this.parent = window.parent;
-        this.parent.addEventListener('message', (msg) => {
-            this.receive(msg.data);
-        });
     }
 
-    connect(address)
-    {
-        this.conn = new WebSocket(address);
-
-        this.conn.addEventListener('open', () => {
-            console.log('Connection established');
-            this.watchEvents();
-        });
-
-        this.conn.addEventListener('message', event => {
-            console.log('Received message', event.data);
-            this.receive(event.data);
-        });
+    initSession() {
+        const state = this.localTetris.serialize();
+            this.send({
+                type: 'init-state',
+                state,
+            });
     }
 
     watchEvents()
@@ -106,6 +96,6 @@ class ConnectionManager
     send(data)
     {
         console.log('Sending message', data);
-        this.parent.postMessage(msg, '*');
+        this.parent.postMessage(data, '*');
     }
 }

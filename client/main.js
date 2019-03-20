@@ -5,6 +5,15 @@ tetrisLocal.run();
 
 const connectionManager = new ConnectionManager(tetrisManager);
 
+window.addEventListener('message', (msg) => {
+    if (msg.data.type === 'open') {
+        connectionManager.initSession();
+        connectionManager.watchEvents();
+    } else {
+        connectionManager.receive(msg.data);
+    }
+});
+
 const keyListener = (event) => {
     [
         [65, 68, 69, 87, 83, 32],
