@@ -2,11 +2,14 @@ class ConnectionManager
 {
     constructor(tetrisManager)
     {
-        this.conn = null;
         this.peers = new Map;
-
+        
         this.tetrisManager = tetrisManager;
         this.localTetris = this.tetrisManager.instances[0];
+        this.parent = window.parent;
+        this.parent.addEventListener('message', (msg) => {
+            this.receive(msg.data);
+        });
     }
 
     connect(address)
@@ -15,7 +18,6 @@ class ConnectionManager
 
         this.conn.addEventListener('open', () => {
             console.log('Connection established');
-            this.initSession();
             this.watchEvents();
         });
 
@@ -23,24 +25,6 @@ class ConnectionManager
             console.log('Received message', event.data);
             this.receive(event.data);
         });
-    }
-
-    initSession()
-    {
-        const sessionId = window.location.hash.split('#')[1];
-        const state = this.localTetris.serialize();
-        if (sessionId) {
-            this.send({
-                type: 'join-session',
-                id: sessionId,
-                state,
-            });
-        } else {
-            this.send({
-                type: 'create-session',
-                state,
-            });
-        }
     }
 
     watchEvents()
@@ -110,12 +94,9 @@ class ConnectionManager
         }
     }
 
-    receive(msg)
+    receive(data)
     {
-        const data = JSON.parse(msg);
-        if (data.type === 'session-created') {
-            window.location.hash = data.id;
-        } else if (data.type === 'session-broadcast') {
+        if (data.type === 'session-broadcast') {
             this.updateManager(data.peers);
         } else if (data.type === 'state-update') {
             this.updatePeer(data.clientId, data.fragment, data.state);
@@ -124,8 +105,7 @@ class ConnectionManager
 
     send(data)
     {
-        const msg = JSON.stringify(data);
-        console.log('Sending message', msg);
-        this.conn.send(msg);
+        console.log('Sending message', data);
+        this.parent.postMessage(msg, '*');
     }
 }
