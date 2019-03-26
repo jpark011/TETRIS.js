@@ -1,20 +1,20 @@
 class ConnectionManager
 {
-    constructor(tetrisManager)
+    constructor(tetrisManager, parent)
     {
         this.peers = new Map;
         
         this.tetrisManager = tetrisManager;
         this.localTetris = this.tetrisManager.instances[0];
-        this.parent = window.parent;
+        this.parent = parent;
     }
 
     initSession() {
         const state = this.localTetris.serialize();
-            this.send({
-                type: 'init-state',
-                state,
-            });
+        this.send({
+            type: 'init-state',
+            state,
+        });
     }
 
     watchEvents()

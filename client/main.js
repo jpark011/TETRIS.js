@@ -3,7 +3,7 @@ const tetrisLocal = tetrisManager.createPlayer();
 tetrisLocal.element.classList.add('local');
 tetrisLocal.run();
 
-const connectionManager = new ConnectionManager(tetrisManager);
+const connectionManager = new ConnectionManager(tetrisManager, window.parent);
 
 window.addEventListener('message', (msg) => {
     if (msg.data.type === 'open') {
